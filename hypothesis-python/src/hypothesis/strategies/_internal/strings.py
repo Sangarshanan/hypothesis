@@ -61,10 +61,33 @@ class OneCharStringStrategy(SearchStrategy):
             )
         self.intervals = IntervalSet(intervals)
         self.zero_point = self.intervals.index_above(ord("0"))
+        self.Z_point = self.intervals.index_above(ord("Z"))
 
     def do_draw(self, data):
-        i = integer_range(data, 0, len(self.intervals) - 1, center=self.zero_point)
+        i = self.rewrite_integer(integer_range(data, 0, len(self.intervals) - 1))
+
         return chr(self.intervals[i])
+
+    def rewrite_integer(self, i):
+        # We would like it so that, where possible, shrinking replaces
+        # characters with simple ascii characters, so we rejig this
+        # bit so that the smallest values are 0, 1, 2, ..., Z.
+        #
+        # Imagine that numbers are laid out as xxx0yyyZ...
+        # this rearranges them so that they are laid out as
+        # 0yyyZxxx..., which gives a better shrinking order.
+        if i <= self.Z_point:
+            # We want to rewrite the integers [0, n] inclusive
+            # to [zero_point, Z_point].
+            n = self.Z_point - self.zero_point
+            if i <= n:
+                i += self.zero_point
+            else:
+                # This means we need to rewrite n + 1 to 0
+                i -= n + 1
+                assert i < self.zero_point
+            assert 0 <= i <= self.Z_point
+        return i
 
 
 class StringStrategy(MappedSearchStrategy):
