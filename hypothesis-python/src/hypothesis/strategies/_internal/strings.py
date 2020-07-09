@@ -83,9 +83,9 @@ class OneCharStringStrategy(SearchStrategy):
         # characters with simple ascii characters, so we rejig this
         # bit so that the smallest values are 0, 1, 2, ..., Z.
         #
-        # Imagine that numbers are laid out as xxx0yyyZ...
+        # Imagine that numbers are laid out as abc0yyyZ...
         # this rearranges them so that they are laid out as
-        # 0yyyZxxx..., which gives a better shrinking order.
+        # 0yyyZcba..., which gives a better shrinking order.
         if i <= self.Z_point:
             # We want to rewrite the integers [0, n] inclusive
             # to [zero_point, Z_point].
@@ -93,8 +93,9 @@ class OneCharStringStrategy(SearchStrategy):
             if i <= n:
                 i += self.zero_point
             else:
-                # This means we need to rewrite n + 1 to 0
-                i -= n + 1
+                # This means we need to rewrite n + 1 to zero_point - 1, and
+                # sh
+                i = self.zero_point - (i - n)
                 assert i < self.zero_point
             assert 0 <= i <= self.Z_point
         return i
