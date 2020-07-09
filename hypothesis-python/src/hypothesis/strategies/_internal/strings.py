@@ -61,18 +61,20 @@ class OneCharStringStrategy(SearchStrategy):
             )
         self.intervals = IntervalSet(intervals)
         self.zero_point = self.intervals.index_above(ord("0"))
-        self.Z_point = self.intervals.index_above(ord("Z"))
+        self.Z_point = min(
+            self.intervals.index_above(ord("Z")), len(self.intervals) - 1
+        )
 
     def do_draw(self, data):
         if len(self.intervals) > 256:
             if biased_coin(data, 0.1):
-                i = self.rewrite_integer(
-                    integer_range(data, 256, len(self.intervals) - 1)
-                )
+                i = integer_range(data, 256, len(self.intervals) - 1)
             else:
-                i = self.rewrite_integer(integer_range(data, 0, 255))
+                i = integer_range(data, 0, 255)
         else:
-            i = self.rewrite_integer(integer_range(data, 0, len(self.intervals) - 1))
+            i = integer_range(data, 0, len(self.intervals) - 1)
+
+        i = self.rewrite_integer(i)
 
         return chr(self.intervals[i])
 
