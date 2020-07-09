@@ -15,7 +15,7 @@
 
 from hypothesis.errors import InvalidArgument
 from hypothesis.internal import charmap
-from hypothesis.internal.conjecture.utils import integer_range
+from hypothesis.internal.conjecture.utils import biased_coin, integer_range
 from hypothesis.internal.intervalsets import IntervalSet
 from hypothesis.strategies._internal.strategies import (
     MappedSearchStrategy,
@@ -64,7 +64,15 @@ class OneCharStringStrategy(SearchStrategy):
         self.Z_point = self.intervals.index_above(ord("Z"))
 
     def do_draw(self, data):
-        i = self.rewrite_integer(integer_range(data, 0, len(self.intervals) - 1))
+        if len(self.intervals) > 256:
+            if biased_coin(data, 0.1):
+                i = self.rewrite_integer(
+                    integer_range(data, 256, len(self.intervals) - 1)
+                )
+            else:
+                i = self.rewrite_integer(integer_range(data, 0, 255))
+        else:
+            i = self.rewrite_integer(integer_range(data, 0, len(self.intervals) - 1))
 
         return chr(self.intervals[i])
 
