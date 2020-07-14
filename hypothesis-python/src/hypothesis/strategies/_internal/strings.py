@@ -93,8 +93,9 @@ class OneCharStringStrategy(SearchStrategy):
             if i <= n:
                 i += self.zero_point
             else:
-                # This means we need to rewrite n + 1 to zero_point - 1, and
-                # sh
+                # We want to rewrite the integers [n + 1, Z_point] to
+                # [zero_point, 0] (reversing the order so that codepoints below
+                # zero_point shrink upwards).
                 i = self.zero_point - (i - n)
                 assert i < self.zero_point
             assert 0 <= i <= self.Z_point
