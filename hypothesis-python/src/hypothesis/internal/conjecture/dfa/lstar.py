@@ -102,6 +102,15 @@ class LStar:
         s = bytes(s)
         correct_outcome = self.member(s)
 
+        # We don't want to check this inside the loop because it potentially
+        # causes us to evaluate more of the states than we actually need to,
+        # but if our model is mostly correct then this will be faster because
+        # we only need to evaluate strings that are of the form
+        # ``state + experiment``, which will generally be cached and/or needed
+        # later.
+        if self.dfa.matches(s) == correct_outcome:
+            return
+
         # In the papers they assume that we only run this process
         # once, but this is silly - often when you've got a messy
         # string it will be wrong for many different reasons.

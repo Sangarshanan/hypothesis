@@ -101,3 +101,27 @@ def test_iteration_with_dead_nodes():
         bytes([1, 0, 0]),
         bytes([1, 0, 1]),
     ]
+
+
+def test_learning_is_just_checking_when_fully_explored():
+    count = [0]
+
+    def accept(s):
+        count[0] += 1
+        return len(s) <= 5 and all(c == 0 for c in s)
+
+    learner = LStar(accept)
+
+    for c in [0, 1]:
+        for n in range(10):
+            learner.learn(bytes([c]) * n)
+
+    assert list(learner.dfa) == [bytes(n) for n in range(6)]
+
+    (prev,) = count
+
+    learner.learn([2] * 11)
+
+    calls = count[0] - prev
+
+    assert calls == 1
