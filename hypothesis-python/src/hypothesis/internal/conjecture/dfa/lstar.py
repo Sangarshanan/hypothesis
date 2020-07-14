@@ -29,6 +29,9 @@ The two relevant papers for understanding this are:
   Information and computation 75.2 (1987): 87-106.
 * Rivest, Ronald L., and Robert E. Schapire. "Inference of finite automata
   using homing sequences." Information and Computation 103.2 (1993): 299-347.
+  Note that we only use the material from section 4.5 "Improving Angluin's L*
+  algorithm" (page 318), and all of the rest of the material on homing
+  sequences can be skipped.
 
 The former explains the core algorithm, the latter a modification
 we use (which we have further modified) which allows it to
