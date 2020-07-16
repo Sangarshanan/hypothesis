@@ -123,7 +123,7 @@ class LStar:
 
             states = [dfa.start]
 
-            def accept(n):
+            def seems_right(n):
                 """After reading n characters from s, do we seem to be
                 in the right state?
 
@@ -141,7 +141,7 @@ class LStar:
 
                 return self.member(dfa.label(states[n]) + s[n:]) == correct_outcome
 
-            n = find_integer(accept)
+            n = find_integer(seems_right)
 
             # We got to the end without ever finding ourself in a bad
             # state, so we must correctly match this string.
