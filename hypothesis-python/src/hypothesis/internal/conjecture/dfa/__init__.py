@@ -98,7 +98,7 @@ class DFA:
             cache[i] = False
         return result
 
-    def __iter__(self):
+    def all_matching_strings(self):
         """Iterate over all strings matched by this automaton
         in shortlex-ascending order."""
         queue = deque([(self.start, b"")])

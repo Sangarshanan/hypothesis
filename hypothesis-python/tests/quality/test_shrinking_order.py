@@ -102,7 +102,7 @@ def iter_values(strategy, unique_by=lambda s: s):
     seen = set()
 
     while True:
-        for s in learner.dfa:
+        for s in learner.dfa.all_matching_strings():
             # We learned this badly. Relearn this particular
             # string and restart the loop.
             if not learner.member(s):
