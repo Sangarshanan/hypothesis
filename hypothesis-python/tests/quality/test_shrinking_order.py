@@ -103,9 +103,11 @@ def iter_values(strategy, unique_by=lambda s: s):
 
     while True:
         for s in learner.dfa.all_matching_strings():
-            # We learned this badly. Relearn this particular
-            # string and restart the loop.
             if not learner.member(s):
+                # This string matched the DFA but didn't
+                # satisfy the membership test. We relearn
+                # the string, improving our learner, and
+                # restart the loop.
                 learner.learn(s)
                 break
             result = ConjectureData.for_buffer(s).draw(strategy)
