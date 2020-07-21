@@ -16,7 +16,6 @@
 from hypothesis.internal.conjecture.dfa import DFA
 from hypothesis.internal.conjecture.junkdrawer import find_integer
 
-
 """
 This module contains an implementation of the L* algorithm
 for learning a deterministic finite automaton based on an
