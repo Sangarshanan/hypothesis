@@ -78,7 +78,7 @@ def test_iterates_over_learned_strings():
 
     dfa = learner.dfa
     n = 9
-    matches = list(itertools.islice(dfa, n + 1))
+    matches = list(itertools.islice(dfa.all_matching_strings(), n + 1))
     assert len(matches) == n
 
 
@@ -95,7 +95,7 @@ def test_iteration_with_dead_nodes():
     assert not dfa.is_dead(i)
     assert dfa.is_dead(dfa.transition(i, 2))
 
-    assert list(learner.dfa) == [
+    assert list(learner.dfa.all_matching_strings()) == [
         bytes([0, 0, 0]),
         bytes([0, 0, 1]),
         bytes([1, 0, 0]),
@@ -116,7 +116,7 @@ def test_learning_is_just_checking_when_fully_explored():
         for n in range(10):
             learner.learn(bytes([c]) * n)
 
-    assert list(learner.dfa) == [bytes(n) for n in range(6)]
+    assert list(learner.dfa.all_matching_strings()) == [bytes(n) for n in range(6)]
 
     (prev,) = count
 
