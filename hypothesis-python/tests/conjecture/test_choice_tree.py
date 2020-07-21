@@ -89,6 +89,15 @@ def test_skips_over_exhausted_children():
     assert results == [(1, 0), (1, 1), (2, 0)]
 
 
+def test_extends_prefix_from_right():
+    def f(chooser):
+        chooser.choose(range(4))
+
+    tree = ChoiceTree()
+    result = tree.step(select(), f)
+    assert result == (3,)
+
+
 def test_starts_from_the_end():
     def f(chooser):
         chooser.choose(range(3))
