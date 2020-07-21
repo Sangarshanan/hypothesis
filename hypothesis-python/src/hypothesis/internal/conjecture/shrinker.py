@@ -520,6 +520,8 @@ class Shrinker:
         while any_ran:
             any_ran = False
 
+            reordering = {}
+
             # We run remove_discarded after every pass to do cleanup
             # keeping track of whether that actually works. Either there is
             # no discarded data and it is basically free, or it reliably works
@@ -534,7 +536,7 @@ class Shrinker:
                 if can_discard:
                     can_discard = self.remove_discarded()
 
-                self.shrink_target
+                before_sp = self.shrink_target
 
                 # Run the shrink pass until it fails to make any progress
                 # ten times in a row. This implicitly boosts shrink passes
@@ -556,6 +558,15 @@ class Shrinker:
                         failures = 0
                     else:
                         failures += 1
+
+                if self.shrink_target is before_sp:
+                    reordering[sp] = 1
+                elif len(self.buffer) < len(before_sp.buffer):
+                    reordering[sp] = -1
+                else:
+                    reordering[sp] = 0
+
+            passes.sort(key=reordering.__getitem__)
 
     @property
     def buffer(self):
