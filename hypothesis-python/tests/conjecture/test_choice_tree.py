@@ -136,3 +136,16 @@ def test_exhausts_randomly():
 
     assert len(seen) == 10
     assert tree.exhausted
+
+
+def test_exhausts_randomly_when_filtering():
+    def f(chooser):
+        chooser.choose(range(10), lambda x: False)
+
+    tree = ChoiceTree()
+
+    random = Random()
+
+    tree.step(random_selection_order(random), f)
+
+    assert tree.exhausted
