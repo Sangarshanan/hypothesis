@@ -41,7 +41,9 @@ def random_selection_order(random):
 
     def selection_order(depth, n):
         pending = LazySequenceCopy(range(n))
-        while pending:
+        while True:
+            # This will never be called with pending empty because
+            # at that point the node is exhausted.
             yield pop_random(random, pending)
 
     return selection_order
