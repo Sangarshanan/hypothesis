@@ -530,8 +530,6 @@ class Shrinker:
             # try again once all of the passes have been run.
             can_discard = self.remove_discarded()
 
-            self.shrink_target
-
             for sp in passes:
                 if can_discard:
                     can_discard = self.remove_discarded()
